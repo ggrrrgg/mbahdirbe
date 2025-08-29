@@ -24,5 +24,9 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+app.listen(PORT, HOST, () => {
+  console.log(`🚀 Server running at http://${HOST}:${PORT}`);
+});
+
 // const UserRouter = require('./controllers/UserController');
 // app.use('/users', UserRouter);

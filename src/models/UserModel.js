@@ -23,11 +23,7 @@ const UserSchema = new Schema({
         unique: false,
         trim: true
     },
-    // telephone: {
-    //     type: String,
-    //     required: false,
-    //     unique: false
-    // },
+   
     email: {
         type: String,
         required: true,
@@ -35,30 +31,14 @@ const UserSchema = new Schema({
         trim: true,
         match: [/\S+@\S+\.\S+/, 'is invalid']
     },
-    // website: {
-    //     type: String,
-    //     required: false,
-    //     unique: false,
-    //     trim: true,
-    //     validate: {
-    //         validator: function (v) {
-    //             return !v || /^(https?:\/\/)[\w.-]+\.[a-z]{2,}.*$/.test(v);
-    //         },
-    //         message: props => `${props.value} is not a valid URL!`
-    //     }
-    // },
+    
     password: {
         type: String,
         required: true,
         unique: false,
         minlength: 8
     },
-    // address: {
-    //     type: String,
-    //     required: false,
-    //     unique: false,
-    //     trim: true
-    // },
+   
     admin: {
         type: Boolean,
         default: false

@@ -35,11 +35,8 @@ router.post('/add-new', authenticate, async (req, res) => {
 
   try {
     const existingBusiness = await Business.findOne({ businessName: req.body.businessName });
-    if (existingBusiness) {
-      return res.status(400).json({ message: "A business with this name already exists" });
-    }
+    if (existingBusiness) return res.status(400).json({ message: "A business with this name already exists" });
 
-    // Validate category
     const category = await Category.findById(req.body.category);
     if (!category) return res.status(400).json({ message: "Invalid category ID" });
 
@@ -64,7 +61,6 @@ router.post('/add-new', authenticate, async (req, res) => {
   }
 });
 
-
 // PATCH existing business (admin)
 router.patch('/update/:id', authenticate, async (req, res) => {
   if (!req.user.admin) return res.status(403).json({ message: "Unauthorized" });
@@ -73,7 +69,6 @@ router.patch('/update/:id', authenticate, async (req, res) => {
     const business = await Business.findById(req.params.id);
     if (!business) return res.status(404).json({ message: "Business not found" });
 
-    // Validate category
     let categoryId = business.category;
     if (req.body.category) {
       const category = await Category.findById(req.body.category);
@@ -104,7 +99,6 @@ router.patch('/update/:id', authenticate, async (req, res) => {
     res.status(500).json({ message: "Error updating business" });
   }
 });
-
 
 // DELETE business (admin)
 router.delete('/delete/:id', authenticate, async (req, res) => {
@@ -142,14 +136,12 @@ router.get('/my-business', authenticate, async (req, res) => {
   }
 });
 
-
 // POST user's own business
 router.post('/my-business/add', authenticate, async (req, res) => {
   try {
     const existingBusiness = await Business.findOne({ user: req.user._id });
     if (existingBusiness) return res.status(400).json({ message: "You already have a business listed" });
 
-    // Validate category
     const category = await Category.findById(req.body.category);
     if (!category) return res.status(400).json({ message: "Invalid category ID" });
 
@@ -174,7 +166,6 @@ router.post('/my-business/add', authenticate, async (req, res) => {
   }
 });
 
-
 // PATCH user's own business
 router.patch('/my-business/update/:id', authenticate, async (req, res) => {
   try {
@@ -182,7 +173,6 @@ router.patch('/my-business/update/:id', authenticate, async (req, res) => {
     if (!business) return res.status(404).json({ message: "Business not found" });
     if (business.user.toString() !== req.user._id.toString()) return res.status(403).json({ message: "Unauthorized" });
 
-    // Validate category
     let categoryId = business.category;
     if (req.body.category) {
       const category = await Category.findById(req.body.category);
@@ -214,7 +204,6 @@ router.patch('/my-business/update/:id', authenticate, async (req, res) => {
   }
 });
 
-
 // DELETE user's own business
 router.delete('/my-business/delete/:id', authenticate, async (req, res) => {
   try {
@@ -231,8 +220,8 @@ router.delete('/my-business/delete/:id', authenticate, async (req, res) => {
   }
 });
 
-
 module.exports = router;
+
 
 
 

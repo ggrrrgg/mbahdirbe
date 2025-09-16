@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+// const bcrypt = require('bcryptjs');
 const { databaseConnect } = require('./database');
 
 // Number of rounds to perform for bcrypt hashing
 const saltRounds = 10;
 
 
-async function hashPassword(password) {
-    return await bcrypt.hash(password, saltRounds);
-  }
+// async function hashPassword(password) {
+//     return await bcrypt.hash(password, saltRounds);
+//   }
 
 
 databaseConnect().then(async () => {
@@ -26,7 +26,7 @@ let adminAdmin = new User({
         "lastName": "Admin",
         "businessName": "MbahBD",
         "email": "admin@mbahbd.com",
-        "password": await hashPassword("1amadmin"),
+        "password": "1amadmin",
         "admin": true
     });
 

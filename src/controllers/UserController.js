@@ -91,46 +91,37 @@ router.post('/register-account', async (request, response) =>
   });
 
 
-//  POST route to LOG IN
-// localhost3000:users/login
-  router.post("/login", async (request, response) => {
-    // find user by email
-    const user = await User.findOne({ email: request.body.email });
-    if (!user) {
-      return response.status(400).json({ message: "User not found" });
-    }
-    // check if encrypted pws match
-    const pwMatch = await bcrypt.compare(request.body.password, user.password);
-    if (!pwMatch) {
-      return response.status(400).json({ message: "Incorrect password" });
-    }
-    // generate jwt if ok
-    let freshJwt = generateJwt(user._id.toString());
+// POST route to LOG IN
+router.post("/login", async (request, response) => {
+  console.log("Login payload received:", request.body); // see email/password from frontend
 
-	  // respond with the jwt 
-	    response.json({
-		    jwt: freshJwt
-	  });
-    router.post("/login", async (request, response) => {
-  console.log("Login payload:", request.body); // see what's arriving
-
+  // find user by email
   const user = await User.findOne({ email: request.body.email });
   if (!user) {
-    console.log("No user found for email:", request.body.email);
+    console.log("No user found with email:", request.body.email);
     return response.status(400).json({ message: "User not found" });
   }
 
+  // log DB password for comparison
+  console.log("Password from request:", request.body.password);
+  console.log("Password stored in DB (hashed):", user.password);
+
+  // check if encrypted passwords match
   const pwMatch = await bcrypt.compare(request.body.password, user.password);
+  console.log("Password match result:", pwMatch); // true or false
+
   if (!pwMatch) {
-    console.log("Password mismatch for:", request.body.email);
     return response.status(400).json({ message: "Incorrect password" });
   }
 
+  // generate jwt if ok
   let freshJwt = generateJwt(user._id.toString());
-  response.json({ jwt: freshJwt });
-});
-  });
 
+  // respond with the jwt
+  response.json({
+    jwt: freshJwt
+  });
+});
 
 //  PATCH route to UPDATE the current user
 // localhost:3000/update-me

@@ -46,49 +46,45 @@ router.get('/me', authenticate, async (request, response) => {
 
 
 //  POST to route CREATE a user
-// localhost3000:users/register-account
-router.post('/register-account', async (request, response) => 
-  {
+// localhost:3000/users/register-account
+router.post('/register-account', async (request, response) => {
+  try {
     // check if user already exists by email address
-    try {
-      const existingUser = await User.findOne({ email: request.body.email });
-      if (existingUser) {
-        return response
-          .status(400)
-          .json({ message: "A user with this email address already exists" });
-      }
-      
-      // make sure password is at least 8 characters
-      const { password } = request.body;
-      if (password.length < 8) {
-        return response
-          .status(400)
-          .json({ message: "Password should be at least 8 characters long" });
-      }
-      // return user with hashed password
-      const hashedPassword = await bcrypt.hash(password, 10);
-      // define new user object
-      const user = new User({
-        firstName: request.body.firstName,
-        lastName: request.body.lastName,
-        businessName: request.body.businessName,
-        email: request.body.email,
-        password: hashedPassword,
-        admin: request.body.admin,
-        
-      });
-      // save
-      const savedUser = await user.save();
-      // return as json
-      response.json(savedUser);
-
-    } catch (error) {
-      console.error(error);
-      response
-        .status(500)
-        .json({ message: "An error occurred while creating the account." });
+    const existingUser = await User.findOne({ email: request.body.email });
+    if (existingUser) {
+      return response
+        .status(400)
+        .json({ message: "A user with this email address already exists" });
     }
-  });
+    
+    // make sure password is at least 8 characters
+    const { password } = request.body;
+    if (password.length < 8) {
+      return response
+        .status(400)
+        .json({ message: "Password should be at least 8 characters long" });
+    }
+
+    // ❌ don't hash password here — let pre-save hook do it
+    const user = new User({
+      firstName: request.body.firstName,
+      lastName: request.body.lastName,
+      businessName: request.body.businessName,
+      email: request.body.email,
+      password: password,   // plain text
+      admin: request.body.admin || false,
+    });
+
+    const savedUser = await user.save();
+    response.json(savedUser);
+
+  } catch (error) {
+    console.error(error);
+    response
+      .status(500)
+      .json({ message: "An error occurred while creating the account." });
+  }
+});
 
 
 // POST route to LOG IN

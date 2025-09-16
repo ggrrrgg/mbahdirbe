@@ -111,6 +111,24 @@ router.post('/register-account', async (request, response) =>
 	    response.json({
 		    jwt: freshJwt
 	  });
+    router.post("/login", async (request, response) => {
+  console.log("Login payload:", request.body); // see what's arriving
+
+  const user = await User.findOne({ email: request.body.email });
+  if (!user) {
+    console.log("No user found for email:", request.body.email);
+    return response.status(400).json({ message: "User not found" });
+  }
+
+  const pwMatch = await bcrypt.compare(request.body.password, user.password);
+  if (!pwMatch) {
+    console.log("Password mismatch for:", request.body.email);
+    return response.status(400).json({ message: "Incorrect password" });
+  }
+
+  let freshJwt = generateJwt(user._id.toString());
+  response.json({ jwt: freshJwt });
+});
   });
 
 

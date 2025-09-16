@@ -40,7 +40,7 @@ app.listen(PORT, HOST, () => {
 // test message to see the api is running
 app.get("/", (request, response) => {
 
-	response.send("Hello world, this server is hello!");
+	response.send("Heybebe");
 
 });
 

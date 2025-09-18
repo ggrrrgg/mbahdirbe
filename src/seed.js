@@ -33,10 +33,20 @@ let adminAdmin = new User({
      await adminAdmin.save().then(() => {
         console.log('admin Seeded')
     });
+let hiHiBiz = new User({
+        "firstName": "hi",
+        "lastName": "hi",
+        "businessName": "hiBiz",
+        "email": "hi@hi.com",
+        "password": "12345678",
+        "admin": true
+    });
 
-// seed business
+     await hiHiBiz.save().then(() => {
+        console.log('hiHiBiz Seeded')
+    });
 
-// seed Categories
+    // seed Categories
 
 let cafeRestaurant = new Category({
         "name": "Cafes & Restaurants",
@@ -52,6 +62,25 @@ let tradies = new Category({
 });
     await tradies.save().then(() => {
         console.log('tradies Seeded')
-    })
+    });
+
+// seed business
+
+let hiBiz = new Business({
+    "businessName": "hiBiz",
+    "description": "new biz",
+    "images":"",
+    "email":"hi@biz.com",
+    "telephone": "0459345678",
+    "website":"",
+    "address":"3 murwillumbah st",
+    "user": hiHiBiz._id,
+    "category": cafeRestaurant._id
+});
+await hiBiz.save().then(() => {
+    console.log('hiBiz Seeded')
+})
+
+
 
 });

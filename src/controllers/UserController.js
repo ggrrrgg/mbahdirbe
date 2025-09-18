@@ -90,12 +90,12 @@ router.post("/login", async (request, response) => {
   }
 
   // log DB password for comparison
-  console.log("Password from request:", request.body.password);
-  console.log("Password stored in DB (hashed):", user.password);
+  // console.log("Password from request:", request.body.password);
+  // console.log("Password stored in DB (hashed):", user.password);
 
-  // check if encrypted passwords match
-  const pwMatch = await bcrypt.compare(request.body.password, user.password);
-  console.log("Password match result:", pwMatch); // true or false
+  // // check if encrypted passwords match
+  // const pwMatch = await bcrypt.compare(request.body.password, user.password);
+  // console.log("Password match result:", pwMatch); // true or false
 
   if (!pwMatch) {
     return response.status(400).json({ message: "Incorrect password" });

@@ -39,7 +39,7 @@ let hiHiBiz = new User({
         "businessName": "hiBiz",
         "email": "hi@hi.com",
         "password": "12345678",
-        "admin": true
+        "admin": false
     });
 
      await hiHiBiz.save().then(() => {
